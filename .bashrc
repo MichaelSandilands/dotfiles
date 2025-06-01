@@ -84,3 +84,23 @@ eval "$(starship init bash)"
 export PATH="/usr/local/anaconda/bin:$PATH"
 
 [ -f /usr/share/doc/fzf/examples/key-bindings.bash ] && source /usr/share/doc/fzf/examples/key-bindings.bash
+. "$HOME/.cargo/env"
+
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/usr/local/Miniconda3-py312_24.11.1-0-Linux-x86_64/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/usr/local/Miniconda3-py312_24.11.1-0-Linux-x86_64/etc/profile.d/conda.sh" ]; then
+        . "/usr/local/Miniconda3-py312_24.11.1-0-Linux-x86_64/etc/profile.d/conda.sh"
+    else
+        export PATH="/usr/local/Miniconda3-py312_24.11.1-0-Linux-x86_64/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+conda activate datascience_stack
