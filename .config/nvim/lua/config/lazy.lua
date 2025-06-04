@@ -1,3 +1,12 @@
+--[[
+  Install lazy.nvim
+  https://lazy.folke.io/
+
+  lazy.nvim is a modern plugin manager for Neovim. 
+  See here for examples:
+  https://lazy.folke.io/spec/examples
+]]
+
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -32,4 +41,4 @@ require("lazy").setup({
   install = { colorscheme = { "habamax" } },
   -- automatically check for plugin updates
   checker = { enabled = true },
-})
+}
