@@ -5,8 +5,24 @@ return {
     event = { 'BufReadPre', 'BufNewFile' },
     config = function()
       local lint = require 'lint'
+
+      -- Define the linter command
+      lint.linters.lintr = {
+        cmd = 'Rscript',
+        args = {
+          '-e',
+          'lintr::lint(filename = vim.api.nvim_buf_get_name(0), linters = lintr::with_defaults(line_length_linter = NULL))',
+        },
+        stdin = false,
+        ignore_exitcode = true,
+        parser = require('lint.parser').from_errorformat('%f:%l:%c: %t: %m', {
+          source = 'lintr',
+        }),
+      }
+
       lint.linters_by_ft = {
         markdown = { 'markdownlint' },
+        r = { 'lintr' },
       }
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
@@ -53,6 +69,14 @@ return {
           if vim.bo.modifiable then
             lint.try_lint()
           end
+        end,
+      })
+
+      -- Setup autocommands to run the linter
+      vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'InsertLeave' }, {
+        group = vim.api.nvim_create_augroup('lint', { clear = true }),
+        callback = function(args)
+          lint.try_lint('lintr', { bufnr = args.buf })
         end,
       })
     end,
