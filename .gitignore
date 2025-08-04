@@ -1,2 +1,2 @@
 # Ignore tmux plugins, as they are managed by tpm
-./tmux/.config/tmux/plugins/
+tmux/.config/tmux/plugins/
