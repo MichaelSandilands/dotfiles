@@ -1,4 +1,16 @@
 # BEGIN_KITTY_THEME
-# One Dark
+# Carbonfox
 include current-theme.conf
 # END_KITTY_THEME
+
+font_family	FiraCode Nerd Font Mono
+bold_font	auto
+italic_font	auto
+bold_italic_font auto
+
+font_size 14.0
+
+hide_window_decorations yes
+
+dynamic_background_opacity yes
+background_opacity 0.80
