@@ -203,6 +203,11 @@ return {
 				},
 			})
 
+			local lsp_flags = {
+				allow_incremental_sync = true,
+				debounce_text_changes = 150,
+			}
+
 			-- LSP servers and clients are able to communicate to each other what features they support.
 			--  By default, Neovim doesn't support everything that is in the LSP specification.
 			--  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
@@ -222,7 +227,18 @@ return {
 				-- clangd = {},
 				-- gopls = {},
 				pyright = {},
-				r_language_server = {},
+				r_language_server = {
+					capabilities = capabilities,
+					flags = lsp_flags,
+					filetypes = { "r", "rmd", "rmarkdown" }, -- not directly using it for quarto (as that is handled by otter and often contains more languanges than just R)
+					settings = {
+						r = {
+							lsp = {
+								rich_documentation = true,
+							},
+						},
+					},
+				},
 				-- rust_analyzer = {},
 				-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 				--
