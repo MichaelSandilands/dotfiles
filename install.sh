@@ -9,10 +9,10 @@ DOTFILES_PATH="$HOME/dotfiles"
 # The .gitconfig file holds global Git user name, email, and aliases.
 
 # Check if the file exists in the dotfiles repo
-if [ -f "$DOTFILES_PATH/.gitconfig" ]; then
+if [ -f "$DOTFILES_PATH/gitconfig/.gitconfig" ]; then
     echo "Copying .gitconfig from dotfiles repo to user's home directory (~/)"
     # Copy the file to the user's home directory (~/)
-    cp "$DOTFILES_PATH/.gitconfig" "$HOME/.gitconfig"
+    cp "$DOTFILES_PATH/gitconfig/.gitconfig" "$HOME/.gitconfig"
 else
     echo "Warning: .gitconfig not found in the dotfiles repository. Skipping copy."
 fi
