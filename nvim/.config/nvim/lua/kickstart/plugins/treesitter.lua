@@ -5,23 +5,7 @@ return {
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = {
-        'bash',
-        'c',
-        'diff',
-        'html',
-        'latex',
-        'lua',
-        'luadoc',
-        'markdown',
-        'markdown_inline',
-        'query',
-        'r',
-        'rnoweb',
-        'vim',
-        'vimdoc',
-        'yaml',
-      },
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -32,6 +16,41 @@ return {
         additional_vim_regex_highlighting = { 'ruby' },
       },
       indent = { enable = true, disable = { 'ruby' } },
+      textobjects = {
+        move = {
+          enable = true,
+          set_jumps = false, -- you can change this if you want.
+          goto_next_start = {
+            --- ... other keymaps
+            [']b'] = { query = '@code_cell.inner', desc = 'next code block' },
+          },
+          goto_previous_start = {
+            --- ... other keymaps
+            ['[b'] = { query = '@code_cell.inner', desc = 'previous code block' },
+          },
+        },
+        select = {
+          enable = true,
+          lookahead = true, -- you can change this if you want
+          keymaps = {
+            --- ... other keymaps
+            ['ib'] = { query = '@code_cell.inner', desc = 'in block' },
+            ['ab'] = { query = '@code_cell.outer', desc = 'around block' },
+          },
+        },
+        swap = { -- Swap only works with code blocks that are under the same
+          -- markdown header
+          enable = true,
+          swap_next = {
+            --- ... other keymap
+            ['<leader>sbl'] = '@code_cell.outer',
+          },
+          swap_previous = {
+            --- ... other keymap
+            ['<leader>sbh'] = '@code_cell.outer',
+          },
+        },
+      },
     },
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:

@@ -51,14 +51,4 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
--- local runner = require 'quarto.runner'
--- vim.keymap.set('n', '<localleader>Qc', runner.run_cell, { desc = 'run cell', silent = true })
--- vim.keymap.set('n', '<localleader>Qa', runner.run_above, { desc = 'run cell and above', silent = true })
--- vim.keymap.set('n', '<localleader>QA', runner.run_all, { desc = 'run all cells', silent = true })
--- vim.keymap.set('n', '<localleader>Ql', runner.run_line, { desc = 'run line', silent = true })
--- vim.keymap.set('v', '<localleader>Q', runner.run_range, { desc = 'run visual range', silent = true })
--- vim.keymap.set('n', '<localleader>QA', function()
---   runner.run_all(true)
--- end, { desc = 'run all cells of all languages', silent = true })
-
 -- vim: ts=2 sts=2 sw=2 et
