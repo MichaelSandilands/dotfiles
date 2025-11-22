@@ -27,6 +27,10 @@ return {
       -- this will make it so the output shows up below the \`\`\` cell delimiter
       vim.g.molten_virt_lines_off_by_1 = true
 
+      -- Explicitly set Jupytext default format for all Python files
+      -- 'py:percent' means Python scripts using the # %% convention
+      vim.g.jupytext_fmt = 'py:percent'
+
       vim.keymap.set('n', '<localleader>e', ':MoltenEvaluateOperator<CR>', { desc = 'evaluate operator', silent = true })
       vim.keymap.set('n', '<localleader>os', ':noautocmd MoltenEnterOutput<CR>', { desc = 'open output window', silent = true })
 
