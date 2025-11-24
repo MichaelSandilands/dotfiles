@@ -106,13 +106,13 @@ require 'lazy-bootstrap'
 require 'lazy-plugins'
 
 -- [[ Setting custom options ]]
-require 'custom.options.options'
+-- require 'custom.options.options'
 
 -- [[ Setting custom auto commands ]]
-require 'custom.autocmds.molten-autocmds'
+-- require 'custom.autocmds.molten-autocmds'
 
 -- [[ Setting custom auto keymaps ]]
-require 'custom.keymaps.keymaps'
+-- require 'custom.keymaps.keymaps'
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
