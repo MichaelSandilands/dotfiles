@@ -121,6 +121,8 @@ fi
 
 eval "$(starship init bash)"
 
+
+
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/usr/local/Miniconda3-py312_24.11.1-0-Linux-x86_64/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
@@ -136,5 +138,3 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-export R_LIBS_USER="/home/michael/R/library"
-export PATH="$PATH:/home/michael/lua-language-server/bin"
