@@ -74,7 +74,7 @@ vim.o.confirm = true
 vim.opt.shiftwidth = 4
 
 vim.o.spell = true
-vim.o.spelllang = 'en_uk'
+vim.o.spelllang = 'en_us'
 
 vim.o.dictionary = '/usr/share/dict/british-english'
 

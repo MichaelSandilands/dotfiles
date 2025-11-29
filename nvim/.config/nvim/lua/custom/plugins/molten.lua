@@ -1,4 +1,10 @@
 return {
+  { -- generate docstrings
+    'danymat/neogen',
+    cmd = { 'Neogen' },
+    dependencies = 'nvim-treesitter/nvim-treesitter',
+    config = true,
+  },
   {
     'quarto-dev/quarto-nvim',
     dependencies = {
@@ -39,6 +45,12 @@ return {
         runner.run_all(true)
       end, { desc = 'run all cells of all languages', silent = true })
     end,
+  },
+  {
+    'jbyuki/nabla.nvim',
+    keys = {
+      { '<leader>qm', ':lua require"nabla".toggle_virt()<cr>', desc = 'toggle [m]ath equations' },
+    },
   },
   {
     'benlubas/molten-nvim',
