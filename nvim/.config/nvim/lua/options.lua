@@ -71,4 +71,11 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+vim.opt.shiftwidth = 4
+
+vim.o.spell = true
+vim.o.spelllang = 'en_uk'
+
+vim.o.dictionary = '/usr/share/dict/british-english'
+
 -- vim: ts=2 sts=2 sw=2 et
