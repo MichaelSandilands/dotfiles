@@ -15,6 +15,9 @@ return {
 						block_dividers = { "# %%", "#%%", "```" },
 						env = { PYTHON_BASIC_REPL = "1" }, --this is needed for python3.13 and up.
 					},
+					r = {
+						command = { "R", "--quiet", "--no-save" },
+					},
 				},
 				repl_open_cmd = view.right("40%"),
 			},
