@@ -1,0 +1,57 @@
+# ===================================================================
+#          NEOVIM PROVIDER ENVIRONMENT
+# ===================================================================
+# This environment is dedicated solely to running Neovim's remote
+# Python provider and the Molten plugin. It keeps text-editor 
+# dependencies completely separate from project dependencies.
+#
+# --- Helpful Conda Commands ---
+#
+# Create the environment:
+#   conda env create -f nvim_provider.yml
+#
+# Update the environment (and clean up removed dependencies):
+#   conda env update -f nvim_provider.yml --prune
+#
+# Delete the environment completely:
+#   conda env remove -n nvim_provider
+#
+# View installed packages in this environment:
+#   conda list -n nvim_provider
+#
+# Activate manually (useful for debugging Molten/Pip packages):
+#   conda activate nvim_provider
+# ===================================================================
+
+name: nvim_provider
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  # -- Core Python --
+  - python=3.10
+
+  # -- Neovim Core Integration --
+  - pynvim
+
+  # -- Molten Core Dependencies --
+  - jupyter_client
+  - nbformat
+  - ipython
+  - ipykernel
+  - nb_conda_kernels
+
+  # -- Molten Image/UI Rendering --
+  - pillow
+  - cairosvg
+  - plotly
+  - pyperclip
+  - requests
+  - websocket-client
+
+  # -- Pip-only packages --
+  - pip
+  - pip:
+    - pnglatex
+    - kaleido

@@ -1,0 +1,5 @@
+{
+  "reportUnusedExpression": "none",
+  "reportGeneralTypeIssues": "warning",
+  "pythonVersion": "3.10"
+}
