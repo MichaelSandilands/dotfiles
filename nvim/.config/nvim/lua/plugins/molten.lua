@@ -27,24 +27,31 @@ return {
 			-- this will make it so the output shows up below the \`\`\` cell delimiter
 			vim.g.molten_virt_lines_off_by_1 = true
 
-			-- automatically import output chunks from a jupyter notebook
-			-- tries to find a kernel that matches the kernel in the jupyter notebook
-			-- falls back to a kernel that matches the name of the active venv (if any)
 			local imb = function(e) -- init molten buffer
 				vim.schedule(function()
 					local kernels = vim.fn.MoltenAvailableKernels()
-					local try_kernel_name = function()
-						local metadata = vim.json.decode(io.open(e.file, "r"):read("a"))["metadata"]
-						return metadata.kernelspec.name
+					local kernel_name = nil
+
+					-- FIRST: Try to use the active Conda/Virtual environment
+					local venv = os.getenv("VIRTUAL_ENV") or os.getenv("CONDA_PREFIX")
+					if venv ~= nil then
+						kernel_name = string.match(venv, "/.+/(.+)")
 					end
-					local ok, kernel_name = pcall(try_kernel_name)
-					if not ok or not vim.tbl_contains(kernels, kernel_name) then
-						kernel_name = nil
-						local venv = os.getenv("VIRTUAL_ENV") or os.getenv("CONDA_PREFIX")
-						if venv ~= nil then
-							kernel_name = string.match(venv, "/.+/(.+)")
+
+					-- SECOND: If no active environment is found (or it isn't a valid kernel),
+					-- fall back to the notebook's metadata
+					if kernel_name == nil or not vim.tbl_contains(kernels, kernel_name) then
+						local try_kernel_name = function()
+							local metadata = vim.json.decode(io.open(e.file, "r"):read("a"))["metadata"]
+							return metadata.kernelspec.name
+						end
+						local ok, meta_kernel = pcall(try_kernel_name)
+						if ok and vim.tbl_contains(kernels, meta_kernel) then
+							kernel_name = meta_kernel
 						end
 					end
+
+					-- Initialize the kernel and import outputs
 					if kernel_name ~= nil and vim.tbl_contains(kernels, kernel_name) then
 						vim.cmd(("MoltenInit %s"):format(kernel_name))
 					end
@@ -165,6 +172,24 @@ return {
 			end, {
 				nargs = 1,
 				complete = "file",
+			})
+
+			-- Auto-initialize Molten with the active environment for Quarto/Markdown files
+			vim.api.nvim_create_autocmd("BufEnter", {
+				pattern = { "*.qmd", "*.md" },
+				callback = function()
+					-- Only run if Molten isn't already active
+					if require("molten.status").initialized() ~= "Molten" then
+						local venv = os.getenv("VIRTUAL_ENV") or os.getenv("CONDA_PREFIX")
+						if venv ~= nil then
+							local env_name = string.match(venv, "/.+/(.+)")
+							-- Attempt to silently initialize with the active environment kernel
+							pcall(function()
+								vim.cmd(("MoltenInit %s"):format(env_name))
+							end)
+						end
+					end
+				end,
 			})
 		end,
 	},
