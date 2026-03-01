@@ -65,4 +65,4 @@ vim.diagnostic.config({
 vim.o.confirm = true
 
 -- Force Neovim's Python provider to use the dedicated nvim_provider environment
-vim.g.python3_host_prog = "/home/michael/miniconda3/envs/nvim_provider/bin/python"
+vim.g.python3_host_prog = "/home/michael/miniconda3/envs/nvim_provider/bin/python3"

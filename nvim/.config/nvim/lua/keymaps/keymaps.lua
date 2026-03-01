@@ -104,49 +104,49 @@ wk.add({
 -- Copilot --
 -- I have wrapped these in functions to ensure they don't break if Copilot isn't loaded
 wk.add({
-    mode = "i", -- Insert Mode Mappings (Ghost Text)
-    {
-        "<M-l>",
-        function()
-            require("copilot.suggestion").accept()
-        end,
-        desc = "Copilot [A]ccept",
-    },
-    {
-        "<M-w>",
-        function()
-            require("copilot.suggestion").accept_word()
-        end,
-        desc = "Copilot Accept [W]ord",
-    },
-    {
-        "<M-L>",
-        function()
-            require("copilot.suggestion").accept_line()
-        end,
-        desc = "Copilot Accept [L]ine",
-    },
-    {
-        "<M-]>",
-        function()
-            require("copilot.suggestion").next()
-        end,
-        desc = "Copilot [N]ext Suggestion",
-    },
-    {
-        "<M-[>",
-        function()
-            require("copilot.suggestion").prev()
-        end,
-        desc = "Copilot [P]revious Suggestion",
-    },
-    {
-        "<C-]>",
-        function()
-            require("copilot.suggestion").dismiss()
-        end,
-        desc = "Copilot [D]ismiss",
-    },
+	mode = "i", -- Insert Mode Mappings (Ghost Text)
+	{
+		"<M-l>",
+		function()
+			require("copilot.suggestion").accept()
+		end,
+		desc = "Copilot [A]ccept",
+	},
+	{
+		"<M-w>",
+		function()
+			require("copilot.suggestion").accept_word()
+		end,
+		desc = "Copilot Accept [W]ord",
+	},
+	{
+		"<M-L>",
+		function()
+			require("copilot.suggestion").accept_line()
+		end,
+		desc = "Copilot Accept [L]ine",
+	},
+	{
+		"<M-]>",
+		function()
+			require("copilot.suggestion").next()
+		end,
+		desc = "Copilot [N]ext Suggestion",
+	},
+	{
+		"<M-[>",
+		function()
+			require("copilot.suggestion").prev()
+		end,
+		desc = "Copilot [P]revious Suggestion",
+	},
+	{
+		"<C-]>",
+		function()
+			require("copilot.suggestion").dismiss()
+		end,
+		desc = "Copilot [D]ismiss",
+	},
 })
 
 -- Conform --
@@ -233,9 +233,9 @@ wk.add({
 		desc = "[M]olten [E]valuate Operator",
 	},
 	{
-		"<localleader>mr",
+		"<localleader>mc",
 		":MoltenReevaluateCell<CR>",
-		desc = "[M]olten [R]eevaluate Cell",
+		desc = "[M]olten Reevaluate [C]ell",
 	},
 	{
 		"<localleader>mo",
@@ -251,6 +251,20 @@ wk.add({
 		"<localleader>md",
 		":MoltenDelete<CR>",
 		desc = "[M]olten [D]elete",
+	},
+	{
+		"<leader>mp",
+		function()
+			local venv = os.getenv("VIRTUAL_ENV") or os.getenv("CONDA_PREFIX")
+			if venv ~= nil then
+				-- Extracts the name from the path (e.g., .../envs/ds_stack -> ds_stack)
+				venv = string.match(venv, "/.+/(.+)")
+				vim.cmd(("MoltenInit %s"):format(venv))
+			else
+				vim.cmd("MoltenInit python3")
+			end
+		end,
+		desc = "[M]olten [P]ython for active env",
 	},
 })
 
