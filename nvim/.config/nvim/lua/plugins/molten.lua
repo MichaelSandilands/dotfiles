@@ -196,8 +196,10 @@ return {
 	{
 		-- see the image.nvim readme for more information about configuring this plugin
 		"3rd/image.nvim",
+		build = false, -- skip building the magick luarock; we use the CLI processor
 		opts = {
 			backend = "kitty", -- whatever backend you would like to use
+			processor = "magick_cli", -- shell out to ImageMagick's CLI (no LuaRocks needed)
 			max_width = 100,
 			max_height = 12,
 			max_height_window_percentage = math.huge,

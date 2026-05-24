@@ -24,6 +24,9 @@ stow nvim kitty tmux
 `stow` creates symlinks like `~/.config/nvim -> ~/dotfiles/nvim/.config/nvim`.
 Existing files at those paths will make Stow refuse — move them aside first.
 
+Also set `export EDITOR=nvim` in your shell rc — kitty's `open-actions.conf`
+uses `$EDITOR` to open files (e.g. clicking a file path opens it in Neovim).
+
 ---
 
 ## Dependencies
@@ -45,7 +48,10 @@ neovim
 python3-neovim
 luarocks
 ImageMagick
-compat-lua          # Lua 5.1 compat, needed by image.nvim's magick rock
+compat-lua          # Lua 5.1, so luarocks can build plugin rockspecs (see note below)
+gcc                 # C compiler for Treesitter parsers + telescope-fzf-native
+make
+wl-clipboard        # system clipboard for clipboard=unnamedplus (Wayland)
 
 # System utilities
 stow
@@ -57,56 +63,46 @@ Ubuntu's repositories lag badly on the things that matter most here
 (**Neovim especially** — this config needs **0.11+** for `vim.hl.on_yank`,
 `vim.diagnostic` virtual lines, the `gr*` LSP defaults, and the Treesitter
 `main` branch). It also does **not** pull the runtime tools in transitively, so
-they have to be installed by hand.
+each has to be installed by hand. Package names and the best install method
+drift over time, so treat the table below as a checklist and track down the
+current approach for each rather than copy-pasting commands:
 
 | Purpose | Fedora 43 | Ubuntu / Debian |
 | ------- | --------- | --------------- |
-| Editor | `neovim` | **Not apt** — too old. Use the unstable PPA or a release tarball (see below) |
-| Nerd Font | `cascadia-mono-nf-fonts` | Manual install — apt's `fonts-cascadia-code` is **not** Nerd-Font-patched (see below) |
-| Terminal | `kitty` | `kitty` exists but lags; prefer the official installer (below) |
+| Editor | `neovim` | **Not apt** — too old. Use the `ppa:neovim-ppa/unstable` PPA, or a release tarball/AppImage from the Neovim releases page |
+| Nerd Font | `cascadia-mono-nf-fonts` | Manual install — apt's `fonts-cascadia-code` is **not** Nerd-Font-patched. Use the `Cascadia*NF` builds from Microsoft's Cascadia Code releases so the family name matches `kitty.conf` |
+| Terminal | `kitty` | apt's build lags; prefer the official installer from sw.kovidgoyal.net |
 | Multiplexer | `tmux` | `tmux` |
 | Python provider | `python3-neovim` | `python3-pynvim` (or just rely on the venv below) |
 | Lua rocks | `luarocks` | `luarocks` |
-| Lua 5.1 compat | `compat-lua` | `lua5.1 liblua5.1-0-dev` |
-| Image rendering | `ImageMagick` | `imagemagick libmagickwand-dev` |
+| Lua 5.1 | `compat-lua` | `lua5.1 liblua5.1-0-dev` |
+| Image rendering | `ImageMagick` | `imagemagick` |
 | Symlink manager | `stow` | `stow` |
 | Fuzzy search *(transitive on Fedora)* | — | `ripgrep` |
-| File finder *(transitive on Fedora)* | — | `fd-find` — binary is `fdfind`, symlink it to `fd` (below) |
-| Build toolchain *(transitive on Fedora)* | — | `build-essential` (Treesitter parsers + `fzf-native` compile on install) |
-| Clipboard *(transitive on Fedora)* | — | `wl-clipboard` (Wayland) or `xclip` (X11) — needed for `clipboard=unnamedplus` |
+| File finder *(transitive on Fedora)* | — | `fd-find` — the binary is `fdfind`; symlink it to `fd` on `$PATH` |
+| Build toolchain | `gcc make` | `build-essential` (Treesitter parsers + `fzf-native` compile on install) |
+| Clipboard | `wl-clipboard` | `wl-clipboard` (Wayland) or `xclip` (X11) — needed for `clipboard=unnamedplus` |
 | LSP runtime *(transitive on Fedora)* | — | `nodejs` — required by `pyright` and the web LSPs (`html`, `cssls`, `jsonls`, `yamlls`) |
-
-```sh
-# Base packages
-sudo apt update
-sudo apt install -y tmux luarocks lua5.1 liblua5.1-0-dev \
-  imagemagick libmagickwand-dev stow \
-  ripgrep fd-find build-essential nodejs npm \
-  python3-venv python3-pynvim wl-clipboard
-
-# Ubuntu ships fd as `fdfind`; Telescope/tools expect `fd`
-mkdir -p ~/.local/bin
-ln -sf "$(command -v fdfind)" ~/.local/bin/fd   # ensure ~/.local/bin is on $PATH
-
-# Neovim 0.11+ — apt is too old, use the unstable PPA
-sudo add-apt-repository ppa:neovim-ppa/unstable
-sudo apt update && sudo apt install -y neovim
-# (alternatively: download the release tarball/AppImage from
-#  https://github.com/neovim/neovim/releases)
-
-# Kitty — official installer (apt build lags)
-curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
-
-# Cascadia Code Nerd Font (the NF variant is not in apt)
-mkdir -p ~/.local/share/fonts && cd ~/.local/share/fonts
-curl -fLO https://github.com/ryanoasis/nerd-fonts/releases/latest/download/CascadiaMono.zip
-unzip -o CascadiaMono.zip -d CascadiaMono && rm CascadiaMono.zip
-fc-cache -f
-```
+| Quarto CLI | from quarto.org | from quarto.org |
 
 > **R support is optional.** The config wires up `r_language_server`, an R REPL,
 > and the `styler` formatter, but everything runs fine Python-only. Install R
 > separately if you want it.
+
+> **LaTeX is optional.** The `texlab` LSP and `pnglatex` (math → PNG in Molten
+> output, installed in the provider venv below) only do something useful with a
+> TeX distribution (e.g. TeX Live) installed. `nabla` renders math inline
+> without LaTeX, so it's only needed if you actually build `.tex`.
+
+> **Why LuaRocks + Lua 5.1?** A few plugins ship a LuaRocks rockspec that
+> lazy.nvim builds automatically — e.g. image.nvim's `magick` and plenary.nvim's
+> `luassert`. Keeping `luarocks` and a system Lua 5.1 (`compat-lua`) means those
+> build cleanly instead of lazy falling back to bootstrapping its own
+> `hererocks`, which saves headaches down the road.
+
+> **Quarto CLI required.** `<leader>qp` preview/render shells out to the
+> `quarto` binary, which isn't in the distro repos in a current-enough form —
+> install it from <https://quarto.org>.
 
 ---
 
@@ -152,6 +148,10 @@ the venv makes initialization automatic.
 3. If Molten commands are missing, run `:UpdateRemotePlugins` and restart.
    Background on why this step exists:
    <https://github.com/benlubas/molten-nvim/blob/main/docs/Not-So-Quick-Start-Guide.md#a-note-on-remote-plugins>
+4. **Authenticate Copilot** — needs an active GitHub Copilot subscription. Run
+   `:Copilot auth` and follow the device-code prompt. The token is stored under
+   `~/.config/github-copilot/` and shared across editors, so it's a one-time
+   step per machine; verify with `:Copilot status`.
 
 ### tmux plugins
 
