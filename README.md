@@ -3,11 +3,12 @@
 Personal configuration for a terminal-based **Python / R / Quarto** data-science
 workflow, managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
-| Package | What it configures |
-| ------- | ------------------ |
-| `nvim`  | Neovim (lazy.nvim, LSP, Treesitter, Molten/Quarto notebooks, Iron REPLs, DAP) |
-| `kitty` | Kitty terminal — fonts, Carbonfox theme, image protocol, open-actions |
-| `tmux`  | tmux — Carbonfox status line, TPM plugins, `C-a` prefix |
+| Package   | What it configures                                                               |
+| --------- | -------------------------------------------------------------------------------- |
+| `ipython` | This script automatically executes when launching an interactive IPython session |
+| `nvim`    | Neovim (lazy.nvim, LSP, Treesitter, Molten/Quarto notebooks, Iron REPLs, DAP)    |
+| `kitty`   | Kitty terminal — fonts, Carbonfox theme, image protocol, open-actions            |
+| `tmux`    | tmux — Carbonfox status line, TPM plugins, `C-a` prefix                          |
 
 The directories mirror `~/.config`, so `stow` symlinks them straight into place.
 
@@ -18,7 +19,7 @@ The directories mirror `~/.config`, so `stow` symlinks them straight into place.
 ```sh
 git clone https://github.com/MichaelSandilands/dotfiles.git ~/dotfiles
 cd ~/dotfiles
-stow nvim kitty tmux
+stow ipython nvim kitty tmux
 ```
 
 `stow` creates symlinks like `~/.config/nvim -> ~/dotfiles/nvim/.config/nvim`.
@@ -67,23 +68,23 @@ each has to be installed by hand. Package names and the best install method
 drift over time, so treat the table below as a checklist and track down the
 current approach for each rather than copy-pasting commands:
 
-| Purpose | Fedora 43 | Ubuntu / Debian |
-| ------- | --------- | --------------- |
-| Editor | `neovim` | **Not apt** — too old. Use the `ppa:neovim-ppa/unstable` PPA, or a release tarball/AppImage from the Neovim releases page |
-| Nerd Font | `cascadia-mono-nf-fonts` | Manual install — apt's `fonts-cascadia-code` is **not** Nerd-Font-patched. Use the `Cascadia*NF` builds from Microsoft's Cascadia Code releases so the family name matches `kitty.conf` |
-| Terminal | `kitty` | apt's build lags; prefer the official installer from sw.kovidgoyal.net |
-| Multiplexer | `tmux` | `tmux` |
-| Python provider | `python3-neovim` | `python3-pynvim` (or just rely on the venv below) |
-| Lua rocks | `luarocks` | `luarocks` |
-| Lua 5.1 | `compat-lua` | `lua5.1 liblua5.1-0-dev` |
-| Image rendering | `ImageMagick` | `imagemagick` |
-| Symlink manager | `stow` | `stow` |
-| Fuzzy search *(transitive on Fedora)* | — | `ripgrep` |
-| File finder *(transitive on Fedora)* | — | `fd-find` — the binary is `fdfind`; symlink it to `fd` on `$PATH` |
-| Build toolchain | `gcc make` | `build-essential` (Treesitter parsers + `fzf-native` compile on install) |
-| Clipboard | `wl-clipboard` | `wl-clipboard` (Wayland) or `xclip` (X11) — needed for `clipboard=unnamedplus` |
-| LSP runtime *(transitive on Fedora)* | — | `nodejs` — required by `pyright` and the web LSPs (`html`, `cssls`, `jsonls`, `yamlls`) |
-| Quarto CLI | from quarto.org | from quarto.org |
+| Purpose                               | Fedora 43                | Ubuntu / Debian                                                                                                                        |
+| ------------------------------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Editor                                | `neovim`                 | **Not apt** — too old. Use the `ppa:neovim-ppa/unstable` PPA, or a release tarball/AppImage from the Neovim releases page              |
+| Nerd Font                             | `cascadia-mono-nf-fonts` | Manual install — apt's `fonts-cascadia-code` is **not** Nerd-Font-patched. Use the `Cascadia*NF` builds from Microsoft's Cascadia Code |
+| Terminal                              | `kitty`                  | apt's build lags; prefer the official installer from sw.kovidgoyal.net                                                                 |
+| Multiplexer                           | `tmux`                   | `tmux`                                                                                                                                 |
+| Python provider                       | `python3-neovim`         | `python3-pynvim` (or just rely on the venv below)                                                                                      |
+| Lua rocks                             | `luarocks`               | `luarocks`                                                                                                                             |
+| Lua 5.1                               | `compat-lua`             | `lua5.1 liblua5.1-0-dev`                                                                                                               |
+| Image rendering                       | `ImageMagick`            | `imagemagick`                                                                                                                          |
+| Symlink manager                       | `stow`                   | `stow`                                                                                                                                 |
+| Fuzzy search _(transitive on Fedora)_ | —                        | `ripgrep`                                                                                                                              |
+| File finder _(transitive on Fedora)_  | —                        | `fd-find` — the binary is `fdfind`; symlink it to `fd` on `$PATH`                                                                      |
+| Build toolchain                       | `gcc make`               | `build-essential` (Treesitter parsers + `fzf-native` compile on install)                                                               |
+| Clipboard                             | `wl-clipboard`           | `wl-clipboard` (Wayland) or `xclip` (X11) — needed for `clipboard=unnamedplus`                                                         |
+| LSP runtime _(transitive on Fedora)_  | —                        | `nodejs` — required by `pyright` and the web LSPs (`html`, `cssls`, `jsonls`, `yamlls`)                                                |
+| Quarto CLI                            | from quarto.org          | from quarto.org                                                                                                                        |
 
 > **R support is optional.** The config wires up `r_language_server`, an R REPL,
 > and the `styler` formatter, but everything runs fine Python-only. Install R
