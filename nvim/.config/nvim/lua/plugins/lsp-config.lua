@@ -36,7 +36,19 @@ return {
 				texlab = {},
 
 				-- Python
-				pyright = {},
+				pyright = {
+					settings = {
+						python = {
+							analysis = {
+								diagnosticSeverityOverrides = {
+									-- bare expressions are intentional in notebook
+									-- cells (they're the cell's output), so silence this
+									reportUnusedExpression = "none",
+								},
+							},
+						},
+					},
+				},
 
 				-- R
 				r_language_server = {},
