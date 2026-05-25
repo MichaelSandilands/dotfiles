@@ -20,6 +20,62 @@ local function builtin()
 	return require("telescope.builtin")
 end
 
+-- Custom picker: list every unique #a/b/c tag in the project, then drill into
+-- the chosen one with grep_string. Tags are pulled with ripgrep (run without a
+-- shell, so the regex needs no escaping), then uniqued + sorted in Lua. All
+-- telescope modules are required lazily inside here to keep startup clean.
+local function tag_picker()
+	local pickers = require("telescope.pickers")
+	local finders = require("telescope.finders")
+	local conf = require("telescope.config").values
+	local actions = require("telescope.actions")
+	local action_state = require("telescope.actions.state")
+
+	-- #<letter> then word/slash chars, e.g. #pandas/wrangling. Excludes spaced
+	-- comments (`# note`), shebangs (`#!`), and divider lines (`####`).
+	local matches = vim.fn.systemlist({
+		"rg",
+		"--no-filename",
+		"--no-line-number",
+		"--only-matching",
+		"--no-config",
+		"#[A-Za-z][A-Za-z0-9_/]*",
+	})
+
+	local seen, tags = {}, {}
+	for _, tag in ipairs(matches) do
+		if not seen[tag] then
+			seen[tag] = true
+			table.insert(tags, tag)
+		end
+	end
+	table.sort(tags)
+
+	if vim.tbl_isempty(tags) then
+		vim.notify("No #tags found in the project", vim.log.levels.INFO)
+		return
+	end
+
+	pickers
+		.new({}, {
+			prompt_title = "Tags (" .. #tags .. ")",
+			finder = finders.new_table({ results = tags }),
+			sorter = conf.generic_sorter({}),
+			attach_mappings = function(prompt_bufnr)
+				actions.select_default:replace(function()
+					local entry = action_state.get_selected_entry()
+					actions.close(prompt_bufnr)
+					if entry then
+						-- jump among every occurrence of the chosen tag (literal match)
+						builtin().grep_string({ search = entry[1], use_regex = false })
+					end
+				end)
+				return true
+			end,
+		})
+		:find()
+end
+
 wk.add({
 	mode = "n",
 	{ "<leader>f", group = "[F]ind" },
@@ -64,6 +120,20 @@ wk.add({
 			builtin().live_grep()
 		end,
 		desc = "[F]ind by [G]rep",
+	},
+	{
+		"<leader>f#",
+		function()
+			-- seed the prompt with "#": type a category (e.g. numpy/) to get
+			-- "#numpy/" and narrow live across .py / .qmd / .ipynb
+			builtin().live_grep({ default_text = "#", prompt_title = "Find #tags (live)" })
+		end,
+		desc = "[F]ind [#]tags (live grep)",
+	},
+	{
+		"<leader>ft",
+		tag_picker,
+		desc = "[F]ind [T]ag (unique list)",
 	},
 	{
 		"<leader>fd",

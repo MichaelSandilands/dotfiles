@@ -16,6 +16,7 @@ require("keymaps.conform-keymaps.conform-keymaps")
 require("keymaps.dap-keymaps.dap-keymaps")
 require("keymaps.neotest-keymaps.neotest-keymaps")
 require("keymaps.treesitter-keymaps.treesitter-keymaps")
+require("keymaps.render-markdown-keymaps.render-markdown-keymaps")
 
 -- Global maps -----------------------------------------------------------------
 local wk = require("which-key")

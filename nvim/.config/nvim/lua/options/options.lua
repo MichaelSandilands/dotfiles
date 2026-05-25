@@ -11,7 +11,9 @@ vim.opt.splitbelow = true
 vim.opt.splitright = true
 
 -- When you meet the end of the screen, text does not jump to a new line
-vim.opt.wrap = false
+vim.opt.wrap = true
+vim.opt.linebreak = true
+vim.opt.breakindent = true
 
 -- Tab Options
 -- when `true` tabs become spaces

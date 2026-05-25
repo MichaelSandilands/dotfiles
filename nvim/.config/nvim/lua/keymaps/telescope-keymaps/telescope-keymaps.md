@@ -20,6 +20,8 @@ All under the `[F]ind` group — press `<leader>f` and which-key shows the menu.
 | ------------- | --------------------------------------- | ------------------------------------------ |
 | `<leader>ff`  | Find files                              | Respects `.gitignore`                      |
 | `<leader>fg`  | Live grep                               | Search file contents across the project    |
+| `<leader>f#`  | Live grep seeded with `#`               | Type a category (e.g. `numpy/`) to narrow tags |
+| `<leader>ft`  | Pick a unique `#tag`                    | Lists all tags; select → grep its occurrences |
 | `<leader>fw`  | Grep current word                       | Word under the cursor                       |
 | `<leader>fb`  | Find open buffers                       |                                            |
 | `<leader>fh`  | Find help tags                          | Searches `:help` docs                       |
@@ -32,6 +34,30 @@ All under the `[F]ind` group — press `<leader>f` and which-key shows the menu.
 | `<leader>/`   | Fuzzy find in current buffer            | Dropdown theme, no preview                  |
 | `<leader>f/`  | Live grep in open buffers only          |                                            |
 | `zl`          | Spelling suggestions for word           | `:Telescope spell_suggest`                  |
+
+## Navigating `#tags`
+
+A lightweight personal taxonomy: drop hierarchical hashtags like
+`#pandas/cleaning` or `#numpy/broadcasting` into code comments or prose, then
+jump between them. No index to maintain — it's all ripgrep, so it works the
+moment you type a tag.
+
+- **`<leader>f#`** — live grep pre-seeded with `#`. Type a category to narrow:
+  `numpy/` makes `#numpy/`, then add `broadcasting`. Spans `.py`, `.qmd`, and
+  `.ipynb` because `rg` matches raw text.
+- **`<leader>ft`** — picker of every *unique* tag in the project (deduped +
+  sorted, with a count in the title). Selecting one drills into `grep_string`
+  for that exact tag so you can jump to a specific occurrence.
+
+Placing tags: in `.py`, a line like `#numpy/broadcasting` is just a comment; in
+`.qmd`/markdown, write it inline (no space after `#`, or it becomes a heading);
+inside code chunks, use a Python comment. The `#a/b/c` form is also Obsidian's
+nested-tag syntax, so the same tags carry into a future vault.
+
+> **`.ipynb` caveat:** `rg` finds tags inside the notebook JSON and opens the
+> right file, but because jupytext converts the buffer on open the cursor may
+> land on the wrong line. Favor `.qmd` (or a jupytext-paired `.qmd`) for tagged
+> notes so jumps land precisely.
 
 ## Inside a picker
 

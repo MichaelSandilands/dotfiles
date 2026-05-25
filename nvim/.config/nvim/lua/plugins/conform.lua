@@ -9,7 +9,7 @@ return {
 					lua = { "stylua" },
 					python = { "ruff_format" },
 					quarto = { "injected" },
-					markdown = { "injected" },
+					markdown = { "prettierd", "prettier", stop_after_first = true },
 					r = { "styler" },
 					javascript = {
 						"prettierd",
