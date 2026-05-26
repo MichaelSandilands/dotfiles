@@ -16,7 +16,7 @@ The directories mirror `~/.config`, so `stow` symlinks them straight into place.
 
 ## Install
 
-```sh
+```bash
 git clone https://github.com/MichaelSandilands/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 stow ipython nvim kitty tmux
@@ -117,7 +117,7 @@ and will silently no-op if `pynvim` isn't available.
 See the Molten guide:
 <https://github.com/benlubas/molten-nvim/blob/main/docs/Virtual-Environments.md>
 
-```sh
+```bash
 mkdir ~/.virtualenvs
 python -m venv ~/.virtualenvs/neovim          # create the provider venv
 source ~/.virtualenvs/neovim/bin/activate     # bash/zsh; use activate.fish for fish
@@ -129,10 +129,18 @@ pip install pynvim jupyter_client cairosvg plotly kaleido pnglatex pyperclip nbf
 Each project you run notebooks/REPLs in needs its own `ipykernel` registered so
 Molten can find it:
 
-```sh
+```bash
 source ~/.virtualenvs/project_name/bin/activate    # your project venv
 pip install ipykernel
 python -m ipykernel install --user --name project_name
+```
+
+#### uv Example
+
+```bash
+uv init
+uv add ipykernel
+uv run python -m ipykernel install --user --name project_name
 ```
 
 Molten's `<localleader>mp` and the `*.qmd`/`*.md` auto-init read `$VIRTUAL_ENV` /
@@ -158,7 +166,7 @@ the venv makes initialization automatic.
 
 Plugins are managed by [TPM](https://github.com/tmux-plugins/tpm):
 
-```sh
+```bash
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ```
 
