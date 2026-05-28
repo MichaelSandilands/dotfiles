@@ -32,27 +32,59 @@ return {
 					local kernels = vim.fn.MoltenAvailableKernels()
 					local kernel_name = nil
 
-					-- FIRST: Try to use the active Conda/Virtual environment
-					local venv = os.getenv("VIRTUAL_ENV") or os.getenv("CONDA_PREFIX")
-					if venv ~= nil then
-						kernel_name = string.match(venv, "/.+/(.+)")
+					-- 1) Read kernel from the file itself
+					local try_from_file = function()
+						local fname = e.file
+						if fname:match("%.ipynb$") then
+							local content = io.open(fname, "r"):read("a")
+							local meta = vim.json.decode(content)["metadata"]
+							return meta.kernelspec.name
+						else
+							-- .qmd / .md: scan YAML frontmatter for `jupyter:`
+							local fh = io.open(fname, "r")
+							if fh == nil then
+								return nil
+							end
+							local in_fm = false
+							for line in fh:lines() do
+								if line:match("^%-%-%-%s*$") then
+									if in_fm then
+										break
+									end
+									in_fm = true
+								elseif in_fm then
+									local k = line:match("^%s*jupyter:%s*(%S+)%s*$")
+									if k then
+										fh:close()
+										return k
+									end
+								end
+							end
+							fh:close()
+						end
+						return nil
 					end
 
-					-- SECOND: If no active environment is found (or it isn't a valid kernel),
-					-- fall back to the notebook's metadata
-					if kernel_name == nil or not vim.tbl_contains(kernels, kernel_name) then
-						local try_kernel_name = function()
-							local metadata = vim.json.decode(io.open(e.file, "r"):read("a"))["metadata"]
-							return metadata.kernelspec.name
-						end
-						local ok, meta_kernel = pcall(try_kernel_name)
-						if ok and vim.tbl_contains(kernels, meta_kernel) then
-							kernel_name = meta_kernel
+					local ok, file_kernel = pcall(try_from_file)
+					if ok and file_kernel and vim.tbl_contains(kernels, file_kernel) then
+						kernel_name = file_kernel
+					end
+
+					-- 2) Fall back to venv name, skipping the literal ".venv" / "venv" tail
+					if kernel_name == nil then
+						local venv = os.getenv("VIRTUAL_ENV") or os.getenv("CONDA_PREFIX")
+						if venv ~= nil then
+							local tail = venv:match("/([^/]+)/?$")
+							if tail == ".venv" or tail == "venv" then
+								tail = venv:match("/([^/]+)/[^/]+/?$") -- parent dir
+							end
+							if tail and vim.tbl_contains(kernels, tail) then
+								kernel_name = tail
+							end
 						end
 					end
 
-					-- Initialize the kernel and import outputs
-					if kernel_name ~= nil and vim.tbl_contains(kernels, kernel_name) then
+					if kernel_name ~= nil then
 						vim.cmd(("MoltenInit %s"):format(kernel_name))
 					end
 					vim.cmd("MoltenImportOutput")

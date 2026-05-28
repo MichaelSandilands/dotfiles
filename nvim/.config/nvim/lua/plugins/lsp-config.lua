@@ -51,7 +51,7 @@ return {
 				},
 
 				-- R
-				r_language_server = {},
+				-- r_language_server = {},
 
 				-- Ruff
 				ruff = {},

@@ -57,16 +57,12 @@ wk.add({
 
 -- ---------------------------------------------------------------------------
 -- Cell runners — <localleader>q  (in-buffer code execution)
--- Capitalization convention: lowercase = scoped, UPPERCASE = "all" variant.
---   qra = run above   |  qrA = run All cells
---   qr* = current language only  |  qR* = All languages
 -- ---------------------------------------------------------------------------
 wk.add({
 	mode = "n",
 	{ "<localleader>q", group = "[Q]uarto run" },
-	{ "<localleader>qr", group = "[R]un (this language)" },
 	{
-		"<localleader>qrc",
+		"<localleader>qc",
 		function()
 			runner().run_cell()
 		end,
@@ -74,7 +70,7 @@ wk.add({
 		silent = true,
 	},
 	{
-		"<localleader>qra",
+		"<localleader>qa",
 		function()
 			runner().run_above()
 		end,
@@ -82,7 +78,7 @@ wk.add({
 		silent = true,
 	},
 	{
-		"<localleader>qrA",
+		"<localleader>qA",
 		function()
 			runner().run_all()
 		end,
@@ -90,21 +86,19 @@ wk.add({
 		silent = true,
 	},
 	{
-		"<localleader>qrl",
+		"<localleader>ql",
 		function()
 			runner().run_line()
 		end,
 		desc = "run [L]ine",
 		silent = true,
 	},
-
-	{ "<localleader>qR", group = "[R]un (all languages)" },
 	{
-		"<localleader>qRA",
+		"<localleader>qR",
 		function()
 			runner().run_all(true)
 		end,
-		desc = "run [A]ll cells, all languages",
+		desc = "run all cells, all languages",
 		silent = true,
 	},
 })
@@ -112,7 +106,7 @@ wk.add({
 wk.add({
 	mode = "v",
 	{
-		"<localleader>qrr",
+		"<localleader>qr",
 		function()
 			runner().run_range()
 		end,

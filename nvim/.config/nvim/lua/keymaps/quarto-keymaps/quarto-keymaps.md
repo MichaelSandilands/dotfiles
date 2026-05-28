@@ -11,10 +11,10 @@ otter.nvim. Cell execution is delegated to **Molten** (`default_method =
 
 ## Namespace split
 
-| Prefix                 | Purpose                              |
-| ---------------------- | ------------------------------------ |
-| `<leader>q` (space-q)  | Document / session: preview, help    |
-| `<localleader>q` (`,q`)| Run code in this buffer (cell runners) |
+| Prefix                  | Purpose                                |
+| ----------------------- | -------------------------------------- |
+| `<leader>q` (space-q)   | Document / session: preview, help      |
+| `<localleader>q` (`,q`) | Run code in this buffer (cell runners) |
 
 The cell runners live under `<localleader>` because they're in-buffer code
 execution — the same namespace as Molten's direct maps.
@@ -27,25 +27,23 @@ execution — the same namespace as Molten's direct maps.
 | `<leader>qu` | Update / refresh preview        |
 | `<leader>qq` | Close ("quiet") preview         |
 | `<leader>qh` | `:QuartoHelp` — type a topic    |
-| `<leader>qm` | Toggle math rendering (nabla)*  |
+| `<leader>qm` | Toggle math rendering (nabla)\* |
 
 \* `<leader>qm` is defined in [`lua/plugins/nabla.lua`](../plugins/nabla.lua),
 not here — it just shows up in this group.
 
 ## Cell runners — `<localleader>q`
 
-| Key                | Action                              |
-| ------------------ | ----------------------------------- |
-| `<localleader>qrc` | Run current cell                    |
-| `<localleader>qra` | Run current cell **and** above      |
-| `<localleader>qrA` | Run **all** cells                   |
-| `<localleader>qrl` | Run current line                    |
-| `<localleader>qrr` | Run visual range *(visual mode)*    |
-| `<localleader>qRA` | Run all cells, **all languages**    |
+| Key               | Action                           |
+| ----------------- | -------------------------------- |
+| `<localleader>qc` | Run current cell                 |
+| `<localleader>qa` | Run current cell **and** above   |
+| `<localleader>qA` | Run **all** cells                |
+| `<localleader>ql` | Run current line                 |
+| `<localleader>qr` | Run visual range _(visual mode)_ |
+| `<localleader>qR` | Run all cells, **all languages** |
 
-**Capitalization convention** (now consistent): lowercase is the scoped
-action, UPPERCASE is the "all" variant — `qra` (above) → `qrA` (all cells), and
-`qr*` (this language) → `qR*` (all languages).
+**Capitalization convention:** Lowercase is the scoped action (`qa` for above), UPPERCASE is the "all" variant (`qA` for all cells, `qR` for all languages).
 
 ## Quarto vs. Molten — when to use which
 
