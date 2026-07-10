@@ -6,6 +6,11 @@ return {
 		dependencies = { "3rd/image.nvim" },
 		build = ":UpdateRemotePlugins",
 		init = function()
+			-- Make project-local (--sys-prefix) kernelspecs visible to the provider env.
+			local venv = os.getenv("VIRTUAL_ENV") or os.getenv("CONDA_PREFIX")
+			if venv ~= nil then
+				vim.env.JUPYTER_PATH = venv .. "/share/jupyter"
+			end
 			-- these are examples, not defaults. Please see the readme
 			vim.g.molten_output_win_max_height = 20
 
