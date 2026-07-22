@@ -8,7 +8,7 @@ echo "Bootstrapping personal Codespaces environment..."
 
 sudo apt-get update
 
-sudo apt-get install -y stow tmux ripgrep fd-find curl build-essential
+sudo apt-get install -y stow tmux ripgrep fd-find curl build-essential xclip
 
 # 2. Install the latest stable Neovim
 
@@ -44,7 +44,7 @@ curl -sS https://starship.rs/install.sh | sh -s -- -y
 
 if ! grep -q "starship init bash" ~/.bashrc; then
 
-    echo 'eval "$(starship init bash)"' >> ~/.bashrc
+  echo 'eval "$(starship init bash)"' >>~/.bashrc
 
 fi
 
