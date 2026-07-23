@@ -10,6 +10,9 @@ sudo apt-get update
 
 sudo apt-get install -y stow tmux ripgrep fd-find curl build-essential xclip imagemagick nodejs luarocks lua5.1 liblua5.1-0-dev
 
+# Install tree-sitter CLI globally for nvim-treesitter parser compilation
+sudo npm install -g tree-sitter-cli
+
 # 2. Install the latest stable Neovim
 
 echo "Installing Neovim..."
