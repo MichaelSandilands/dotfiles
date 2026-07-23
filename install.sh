@@ -8,7 +8,7 @@ echo "Bootstrapping personal Codespaces environment..."
 
 sudo apt-get update
 
-sudo apt-get install -y stow tmux ripgrep fd-find curl build-essential xclip
+sudo apt-get install -y stow tmux ripgrep fd-find curl build-essential xclip imagemagick nodejs luarocks lua5.1 liblua5.1-0-dev
 
 # 2. Install the latest stable Neovim
 
